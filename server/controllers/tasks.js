@@ -5,8 +5,7 @@ const getAllTasks = async (req, res) => {
     const tasks = await Task.find();
     return res.status(200).send({ message: "Tasks sent successfully", tasks });
   } catch (error) {
-    return res.status;
-    console.log(error);
+    return res.status(400).send({ message: "Bussiness validation error" });
   }
 };
 
