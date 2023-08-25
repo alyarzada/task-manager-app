@@ -6,6 +6,8 @@ const taskSchema = new Schema({
   title: {
     type: String,
     required: true,
+    trim: true,
+    maxlength: [20, "Max length cant be more than 20"],
   },
   description: {
     type: String,
@@ -19,6 +21,7 @@ const taskSchema = new Schema({
   status: {
     type: String,
     enum: ["todo", "progress", "completed"],
+    default: "todo",
   },
   createdAt: {
     type: Date,
