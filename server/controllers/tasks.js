@@ -1,34 +1,38 @@
 const asyncWrapper = require("../middlewares/async");
 const Task = require("../models/taskModel");
+const asyncHandler = require("../utils/asyncHandler");
 
-const getAllTasks = asyncWrapper(async (req, res) => {
-  const tasks = await Task.find({});
-  return res.status(200).send({ tasks });
-
-  // try {
-  //   const tasks = await Task.find({});
-  //   return res.status(200).send({ message: "Tasks sent successfully", tasks });
-  // } catch (error) {
-  //   return res.status(400).send({ message: "Bussiness validation error" });
-  // }
+const getAllTasks = asyncHandler(async (req, res) => {
+  try {
+    const tasks = await Task.find({});
+    res.status(200).send({ message: "Tasks sent successfully", tasks });
+  } catch (error) {
+    return res.status(400).send({ message: error.message });
+  }
 });
 
 const createNewTask = async (req, res) => {
   const data = req.body;
 
-  // const newTask = await Task.create(data);
-  // return res
-  //   .status(201)
-  //   .send({ message: "Task created successfully!", data: newTask });
+  try {
+    const task = await Task.create(data);
+    return res.status(200).send({ task });
+  } catch (error) {
+    return res.status(400).send({ message: "Bussiness validation error" });
+  }
+};
+
+const updateTask = async (req, res) => {
+  const data = req.body;
+  const { id } = req.params;
 
   try {
-    const newTask = await Task.create(data);
-    return res
-      .status(201)
-      .send({ message: "Task created successfully", data: newTask });
+    const task = await Task.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+    return res.status(200).send({ task });
   } catch (error) {
-    console.log(error.message.title);
-    return res.status(400).send({ message: error.message });
+    return res.status(400).send({ message: "Bussiness validation error" });
   }
 };
 
@@ -36,32 +40,8 @@ const deleteTask = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedTaskId = await Task.findByIdAndDelete(id);
-
-    if (!deletedTaskId) {
-      return res.status(404).json({ message: "Task not found" });
-    }
-
-    res.json({ message: "Task deleted successfully" });
-  } catch (error) {
-    return res.status(400).send({ message: "Bussiness validation error" });
-  }
-};
-
-const updateTask = async (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-
-  try {
-    const updatedTask = await Task.findByIdAndUpdate(id, body, {
-      new: true,
-    });
-
-    if (!updatedTask) {
-      return res.status(404).json({ message: "Task not found" });
-    }
-
-    res.json({ message: "Task updated successfully" });
+    const task = await Task.findByIdAndDelete(id);
+    return res.status(200).send({ id: task._id });
   } catch (error) {
     return res.status(400).send({ message: "Bussiness validation error" });
   }
@@ -70,12 +50,6 @@ const updateTask = async (req, res) => {
 module.exports = {
   getAllTasks,
   createNewTask,
-  deleteTask,
   updateTask,
+  deleteTask,
 };
-
-// find
-// findOne;
-// create
-// findByIdAndDelete, findOneAndDelete
-// findByIdAndUpdate, findOneAndUpdate

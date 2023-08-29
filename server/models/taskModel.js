@@ -14,10 +14,9 @@ const Schema = mongoose.Schema;
 const taskSchema = new Schema({
   title: {
     type: String,
-    required: [true, "must provide title"],
+    required: true,
     trim: true,
-    maxlength: [20, "name can not be more than 20 characters"],
-    minlength: [2, "name can not be less than 2 characters"],
+    maxlength: [20, "Max length cant be more than 20"],
   },
   description: {
     type: String,
@@ -31,6 +30,7 @@ const taskSchema = new Schema({
   status: {
     type: String,
     enum: ["todo", "progress", "completed"],
+    default: "todo",
   },
   createdAt: {
     type: Date,
