@@ -7,10 +7,7 @@ const App = () => {
   return (
     <div className="container mx-auto mt-2">
       <AddTask />
-      <div className="grid grid-cols-3 gap-4 mt-2">
-        <Tasks />
-        
-      </div>
+      <Tasks />
     </div>
   )
 }

@@ -50,7 +50,7 @@ const AddTask = () => {
 
     return (
         <Dialog>
-            <DialogTrigger asChild>
+            <DialogTrigger asChild  className="mb-2">
                 <Button variant="outline">Add task</Button>
             </DialogTrigger>
 

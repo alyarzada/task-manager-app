@@ -1,27 +1,37 @@
-import React from 'react'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "../../components/ui/card"
+import React, { useEffect, useState } from 'react';
+import { DataTable } from '../../components/paymet/data-table';
+
 const Tasks = () => {
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/todos?_start=0&_limit=5')
+            .then(response => response.json())
+            .then(json => setData(json))
+    }, [])
+
+    const columns = [
+        {
+            accessorKey: "userId",
+            header: "Title",
+        },
+        {
+            accessorKey: "id",
+            header: "Description",
+        },
+        {
+            accessorKey: "title",
+            header: "Priority",
+        },
+        {
+            accessorKey: "title",
+            header: "Status",
+        },
+    ];
+
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Card Title</CardTitle>
-                <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-                <p>Card Footer</p>
-            </CardFooter>
-        </Card>
+        <DataTable columns={columns} data={data} />
     )
 }
 
-export default Tasks
+export default Tasks;
