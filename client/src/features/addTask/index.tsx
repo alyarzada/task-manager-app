@@ -31,12 +31,13 @@ const AddTask = () => {
 
     const createTask = async () => {
         try {
-            const response = await axios.post('', {
+            const response = await axios.post('http://localhost:4000/api/tasks', {
                 title,
                 description,
                 priority,
                 status
             });
+            console.log(response);
         } catch (error) {
             console.log(error);
         }
@@ -50,7 +51,7 @@ const AddTask = () => {
 
     return (
         <Dialog>
-            <DialogTrigger asChild  className="mb-2">
+            <DialogTrigger asChild className="mb-2">
                 <Button variant="outline">Add task</Button>
             </DialogTrigger>
 

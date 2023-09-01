@@ -5,7 +5,7 @@ import {
     flexRender,
     getCoreRowModel,
     useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 import {
     Dialog,
     DialogContent,
@@ -25,7 +25,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "../../components/ui/alert-dialog"
+} from "../../components/ui/alert-dialog";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../../components/ui/select"
+import { Textarea } from "../../components/ui/textarea";
 import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
 import {
@@ -38,6 +46,8 @@ import {
 } from "../../components/ui/table"
 import { Button } from "../ui/button"
 import { Pencil, Trash } from "lucide-react"
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -54,13 +64,44 @@ export function DataTable<TData, TValue>({
         getCoreRowModel: getCoreRowModel(),
     })
 
+
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [priority, setPriority] = useState('');
+    const [status, setStatus] = useState('');
+
+
     const handleEditButtonClick = (rowData: any) => {
         console.log("Button clicked for row: handleEditButtonClick", rowData);
+        setTitle(rowData.description)
+        setDescription(rowData.description)
+        setPriority(rowData.description)
+        setStatus(rowData.description)
     };
 
     const handleDeleteButtonClick = (rowData: any) => {
         console.log("Button clicked for row: handleDeleteButtonClick", rowData);
     };
+
+    const updateData = async () => {
+        try {
+            const response = await axios.patch('', {
+                title,
+                description,
+                priority,
+                status
+            });
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+
+    const formSubmit = (e: any) => {
+        e.preventDefault();
+        console.log(e);
+    }
 
     return (
         <div className="rounded-md border">
@@ -83,6 +124,7 @@ export function DataTable<TData, TValue>({
                         </TableRow>
                     ))}
                 </TableHeader>
+
                 <TableBody>
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
@@ -96,6 +138,7 @@ export function DataTable<TData, TValue>({
                                     </TableCell>
                                 ))}
                                 <TableCell>
+
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="ghost" onClick={() => handleEditButtonClick(row.original)} className="mr-2">
@@ -109,23 +152,60 @@ export function DataTable<TData, TValue>({
                                                     Make changes to your profile here. Click save when you're done.
                                                 </DialogDescription>
                                             </DialogHeader>
-                                            <div className="grid gap-4 py-4">
+
+                                            <form className="grid gap-4 py-4" onSubmit={formSubmit}>
+
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="title" className="text-right">
+                                                        Title
+                                                    </Label>
+                                                    <Input id="tritle" value={title} className="col-span-3" placeholder="Title" onChange={(e: any) => { setTitle(e.target.value) }} />
+                                                </div>
+
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="description" className="text-right">
+                                                        Description
+                                                    </Label>
+                                                    <Textarea id="description" className="col-span-3" placeholder="Description" value={description} onChange={(e: any) => { setDescription(e.target.value) }} />
+                                                </div>
+
                                                 <div className="grid grid-cols-4 items-center gap-4">
                                                     <Label htmlFor="name" className="text-right">
-                                                        Name
+                                                        Priority
                                                     </Label>
-                                                    <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                                                    <Select onValueChange={(e: any) => { setPriority(e) }}>
+                                                        <SelectTrigger className="w-[280px]" >
+                                                            <SelectValue placeholder={priority} />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="low">Low</SelectItem>
+                                                            <SelectItem value="medium">Medium</SelectItem>
+                                                            <SelectItem value="high">High</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
                                                 </div>
+
                                                 <div className="grid grid-cols-4 items-center gap-4">
-                                                    <Label htmlFor="username" className="text-right">
-                                                        Username
+                                                    <Label htmlFor="name" className="text-right">
+                                                        Status
                                                     </Label>
-                                                    <Input id="username" value="@peduarte" className="col-span-3" />
+                                                    <Select onValueChange={(e: any) => { setStatus(e) }}>
+                                                        <SelectTrigger className="w-[280px]">
+                                                            <SelectValue placeholder={status} />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="todo">Todo</SelectItem>
+                                                            <SelectItem value="progress">Progress</SelectItem>
+                                                            <SelectItem value="completed">Completed</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
                                                 </div>
-                                            </div>
-                                            <DialogFooter>
-                                                <Button type="submit">Save changes</Button>
-                                            </DialogFooter>
+
+                                                <DialogFooter>
+                                                    <Button type="submit">Save changes</Button>
+                                                </DialogFooter>
+                                            </form>
+
                                         </DialogContent>
                                     </Dialog>
 
