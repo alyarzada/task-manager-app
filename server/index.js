@@ -3,20 +3,17 @@ require("dotenv").config();
 const taskRoutes = require("./routers/tasks");
 const mongoose = require("mongoose");
 const connectDb = require("./db/connect");
-const cors = require('cors')
+const cors = require("cors");
 
 // init express
 const app = express();
 
 // middleware
 app.use(express.json());
-
-// routes
-app.use("/api/tasks", taskRoutes);
-
-//cors
 app.use(cors());
 
+// routes middleware
+app.use("/api/tasks", taskRoutes);
 
 // app.use(notFound);
 // app.use(errorHandlerMiddleware);
