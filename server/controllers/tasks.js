@@ -1,51 +1,42 @@
-const asyncWrapper = require("../middlewares/async");
+const { createCustomError } = require("../errors/customError");
+const asyncHandler = require("../middlewares/asyncHandler");
 const Task = require("../models/taskModel");
-const asyncHandler = require("../utils/asyncHandler");
 
+// getAllTasks
 const getAllTasks = asyncHandler(async (req, res) => {
-  try {
-    const tasks = await Task.find({});
-    res.status(200).send({ message: "Tasks sent successfully", tasks });
-  } catch (error) {
-    return res.status(400).send({ message: error.message });
-  }
+  const tasks = await Task.find({});
+  res.status(200).send({ message: "Tasks sent successfully", tasks });
 });
 
-const createNewTask = async (req, res) => {
+// createNewTask
+const createNewTask = asyncHandler(async (req, res) => {
   const data = req.body;
 
-  try {
-    const task = await Task.create(data);
-    return res.status(200).send({ task });
-  } catch (error) {
-    return res.status(400).send({ message: "Bussiness validation error" });
-  }
-};
+  const task = await Task.create(data);
+  return res.status(200).send({ task });
+});
 
-const updateTask = async (req, res) => {
+// updateTask
+const updateTask = asyncHandler(async (req, res) => {
   const data = req.body;
   const { id } = req.params;
 
-  try {
-    const task = await Task.findByIdAndUpdate(id, data, {
-      new: true,
-    });
-    return res.status(200).send({ task });
-  } catch (error) {
-    return res.status(400).send({ message: "Bussiness validation error" });
-  }
-};
+  const task = await Task.findByIdAndUpdate(id, data, {
+    new: true,
+  });
+  return res.status(200).send({ task });
+});
 
-const deleteTask = async (req, res) => {
+// deleteTask
+const deleteTask = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  try {
-    const task = await Task.findByIdAndDelete(id);
-    return res.status(200).send({ id: task._id });
-  } catch (error) {
-    return res.status(400).send({ message: "Bussiness validation error" });
+  const task = await Task.findOneAndDelete({ _id: id });
+  if (!task) {
+    return next(createCustomError(`No task with id: ${id}`, 404));
   }
-};
+  return res.status(200).send({ id: task._id });
+});
 
 module.exports = {
   getAllTasks,
