@@ -26,8 +26,8 @@ const Tasks = () => {
             header: "ID",
         },
         {
-            accessorKey: "name",
-            header: "Name",
+            accessorKey: "title",
+            header: "Title",
         },
         {
             accessorKey: "description",

@@ -16,10 +16,7 @@ app.use("/api/tasks", taskRoutes);
 
 //cors
 app.use(cors());
-const corsOptions = {
-  origin: 'http://127.0.0.1:5173',
-};
-app.use(cors(corsOptions));
+
 
 // app.use(notFound);
 // app.use(errorHandlerMiddleware);

@@ -37,7 +37,9 @@ const AddTask = () => {
                 priority,
                 status
             });
+
             console.log(response);
+
         } catch (error) {
             console.log(error);
         }

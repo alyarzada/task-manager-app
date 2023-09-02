@@ -73,30 +73,37 @@ export function DataTable<TData, TValue>({
 
     const handleEditButtonClick = (rowData: any) => {
         console.log("Button clicked for row: handleEditButtonClick", rowData);
-        setTitle(rowData.description)
+        setTitle(rowData.title)
         setDescription(rowData.description)
-        setPriority(rowData.description)
-        setStatus(rowData.description)
+        setPriority(rowData.priority)
+        setStatus(rowData.status)
     };
 
-    const handleDeleteButtonClick = (rowData: any) => {
-        console.log("Button clicked for row: handleDeleteButtonClick", rowData);
+    const handleDeleteButtonClick = async (rowData: any) => {
+        console.log("Button clicked for row: handleDeleteButtonClick", rowData._id);
+        try {
+            const request = await axios.delete(`http://localhost:4000/api/tasks/${rowData._id}`);
+            console.log(request);
+        } catch (error) {
+            console.log(error);
+        }
     };
+
 
     const updateData = async () => {
         try {
-            const response = await axios.patch('', {
+            const response = await axios.patch(`http://localhost:4000/api/tasks/id`, {
                 title,
                 description,
                 priority,
                 status
             });
+            console.log(response);
         } catch (error) {
             console.log(error)
         }
 
     }
-
 
     const formSubmit = (e: any) => {
         e.preventDefault();
@@ -159,7 +166,7 @@ export function DataTable<TData, TValue>({
                                                     <Label htmlFor="title" className="text-right">
                                                         Title
                                                     </Label>
-                                                    <Input id="tritle" value={title} className="col-span-3" placeholder="Title" onChange={(e: any) => { setTitle(e.target.value) }} />
+                                                    <Input id="title" value={title} className="col-span-3" placeholder="Title" onChange={(e: any) => { setTitle(e.target.value) }} />
                                                 </div>
 
                                                 <div className="grid grid-cols-4 items-center gap-4">
@@ -170,7 +177,7 @@ export function DataTable<TData, TValue>({
                                                 </div>
 
                                                 <div className="grid grid-cols-4 items-center gap-4">
-                                                    <Label htmlFor="name" className="text-right">
+                                                    <Label htmlFor="priority" className="text-right">
                                                         Priority
                                                     </Label>
                                                     <Select onValueChange={(e: any) => { setPriority(e) }}>
@@ -211,7 +218,7 @@ export function DataTable<TData, TValue>({
 
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
-                                            <Button variant="ghost" onClick={() => handleDeleteButtonClick(row.original)} className="mr-2">
+                                            <Button variant="ghost" className="mr-2">
                                                 <Trash className="h-4 w-4" />
                                             </Button>
                                         </AlertDialogTrigger>
@@ -225,7 +232,7 @@ export function DataTable<TData, TValue>({
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                <AlertDialogAction>Continue</AlertDialogAction>
+                                                <AlertDialogAction onClick={() => handleDeleteButtonClick(row.original)}>Continue</AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
                                     </AlertDialog>
