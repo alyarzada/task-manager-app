@@ -5,12 +5,14 @@ const errorHandler = require("./middlewares/errorHandler");
 
 // env
 require("dotenv").config();
+const cors = require("cors");
 
 // init express
 const app = express();
 
 // middlewares
 app.use(express.json());
+app.use(cors());
 
 // route middlewares
 app.use("/api/tasks", taskRoutes);
