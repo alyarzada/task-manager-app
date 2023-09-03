@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Textarea } from "../../components/ui/textarea";
-import axios from "axios";
+import { createNewtask } from "../../services/task";
 
 const AddTask = ({ setData }) => {
   const [title, setTitle] = useState("");
@@ -27,24 +27,13 @@ const AddTask = ({ setData }) => {
   const [priority, setPriority] = useState("");
   const [status, setStatus] = useState("");
 
-  const createTask = async () => {
-    try {
-      const response = await axios.post("http://localhost:4000/api/tasks", {
-        title,
-        description,
-        priority,
-        status,
-      });
-
-      setData((prev) => [...prev, response.data.task]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addTaskSubmit = (e: any) => {
+  const addTaskSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createTask();
+    createNewtask({ title, description, priority, status, setData });
+    setTitle("");
+    setDescription("");
+    setPriority("");
+    setStatus("");
   };
 
   return (
@@ -133,7 +122,9 @@ const AddTask = ({ setData }) => {
           </div>
 
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <DialogTrigger>
+              <Button type="submit">Save changes</Button>
+            </DialogTrigger>
           </DialogFooter>
         </form>
       </DialogContent>
