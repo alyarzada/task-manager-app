@@ -59,3 +59,23 @@ export const deleteTask = async ({ setData, rowData }) => {
         console.log(error);
     }
 };
+
+
+//Handler Delete
+export const handleDeleteButtonClick = async (rowData: any, setData: any) => {
+    deleteTask({ rowData, setData })
+};
+
+//Handler Update
+export const handleUpdateButtonClick = async ({ selectedRowId, title, description, priority, status, setData }) => {
+    updateTask({ selectedRowId, title, description, priority, status, setData })
+};
+
+//Handler Edit
+export const handleEditButtonClick = (rowData: any, setTitle: any, setDescription: any, setPriority: any, setStatus: any, setSelectedRowId: any) => {
+    setTitle(rowData.title);
+    setDescription(rowData.description);
+    setPriority(rowData.priority);
+    setStatus(rowData.status);
+    setSelectedRowId(rowData._id)
+};

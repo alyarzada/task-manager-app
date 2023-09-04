@@ -48,7 +48,7 @@ import { Button } from "../ui/button";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { deleteTask, updateTask } from "../../services/task";
+import { deleteTask, handleDeleteButtonClick, handleEditButtonClick, handleUpdateButtonClick, updateTask } from "../../services/task";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -72,23 +72,9 @@ export function DataTable<TData, TValue>({
   const [status, setStatus] = useState("");
   const [selectedRowId, setSelectedRowId] = useState(null);
 
-  const handleEditButtonClick = (rowData: any) => {
-    console.log("Button clicked for row: handleEditButtonClick", rowData);
-    setTitle(rowData.title);
-    setDescription(rowData.description);
-    setPriority(rowData.priority);
-    setStatus(rowData.status);
-    setSelectedRowId(rowData._id)
-  };
-
-  // handle delete
-  const handleDeleteButtonClick = async (rowData: any) => {
-    deleteTask({ rowData, setData })
-  };
-
   const formSubmit = (e: any) => {
     e.preventDefault();
-    updateTask({ selectedRowId, title, description, priority, status, setData });
+    handleUpdateButtonClick({ selectedRowId, title, description, priority, status, setData })
   };
 
   return (
@@ -133,7 +119,7 @@ export function DataTable<TData, TValue>({
                     <DialogTrigger asChild>
                       <Button
                         variant="ghost"
-                        onClick={() => handleEditButtonClick(row.original)}
+                        onClick={() => handleEditButtonClick(row.original, setTitle, setDescription, setPriority, setStatus, setSelectedRowId)}
                         className="mr-2"
                       >
                         <Pencil className="h-4 w-4" />
@@ -254,7 +240,7 @@ export function DataTable<TData, TValue>({
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => handleDeleteButtonClick(row.original)}
+                          onClick={() => handleDeleteButtonClick(row.original, setData)}
                         >
                           Continue
                         </AlertDialogAction>
