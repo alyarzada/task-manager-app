@@ -48,6 +48,7 @@ import { Button } from "../ui/button";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { deleteTask, handleDeleteButtonClick, handleEditButtonClick, handleUpdateButtonClick, updateTask } from "../../services/task";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -69,47 +70,11 @@ export function DataTable<TData, TValue>({
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
   const [status, setStatus] = useState("");
-
-  const handleEditButtonClick = (rowData: any) => {
-    console.log("Button clicked for row: handleEditButtonClick", rowData);
-    setTitle(rowData.title);
-    setDescription(rowData.description);
-    setPriority(rowData.priority);
-    setStatus(rowData.status);
-  };
-
-  // handle delete
-  const handleDeleteButtonClick = async (rowData: any) => {
-    console.log("Button clicked for row: handleDeleteButtonClick", rowData._id);
-    try {
-      const response = await axios.delete(
-        `http://localhost:4000/api/tasks/${rowData._id}`
-      );
-
-      setData((prev) => prev.filter((item) => item._id !== response.data.id));
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const updateData = async () => {
-    try {
-      const response = await axios.patch(`http://localhost:4000/api/tasks/id`, {
-        title,
-        description,
-        priority,
-        status,
-      });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [selectedRowId, setSelectedRowId] = useState(null);
 
   const formSubmit = (e: any) => {
     e.preventDefault();
-    console.log(e);
+    handleUpdateButtonClick({ selectedRowId, title, description, priority, status, setData })
   };
 
   return (
@@ -124,9 +89,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 );
               })}
@@ -146,17 +111,21 @@ export function DataTable<TData, TValue>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
+
+                {/* Table Cell */}
+
                 <TableCell>
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button
                         variant="ghost"
-                        onClick={() => handleEditButtonClick(row.original)}
+                        onClick={() => handleEditButtonClick(row.original, setTitle, setDescription, setPriority, setStatus, setSelectedRowId)}
                         className="mr-2"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
                     </DialogTrigger>
+
                     <DialogContent className="sm:max-w-[425px]">
                       <DialogHeader>
                         <DialogTitle>Edit profile</DialogTitle>
@@ -167,6 +136,7 @@ export function DataTable<TData, TValue>({
                       </DialogHeader>
 
                       <form className="grid gap-4 py-4" onSubmit={formSubmit}>
+
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="title" className="text-right">
                             Title
@@ -240,12 +210,16 @@ export function DataTable<TData, TValue>({
                         </div>
 
                         <DialogFooter>
-                          <Button type="submit">Save changes</Button>
+                          <DialogTrigger>
+                            <Button type="submit" >Save changes</Button>
+                          </DialogTrigger>
                         </DialogFooter>
                       </form>
                     </DialogContent>
                   </Dialog>
 
+
+                  {/* Delete Button */}
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" className="mr-2">
@@ -266,7 +240,7 @@ export function DataTable<TData, TValue>({
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => handleDeleteButtonClick(row.original)}
+                          onClick={() => handleDeleteButtonClick(row.original, setData)}
                         >
                           Continue
                         </AlertDialogAction>
@@ -274,6 +248,7 @@ export function DataTable<TData, TValue>({
                     </AlertDialogContent>
                   </AlertDialog>
                 </TableCell>
+
               </TableRow>
             ))
           ) : (
