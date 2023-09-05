@@ -32,7 +32,7 @@ const deleteTask = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   const task = await Task.findOneAndDelete({ _id: id });
-  if (!task) {
+  if (task) {
     return next(createCustomError(`No task with id: ${id}`, 404));
   }
   return res.status(200).send({ id: task._id });
