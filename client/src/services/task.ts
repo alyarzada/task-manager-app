@@ -1,17 +1,17 @@
 import axios from "axios";
 
 // getAllTask -------------
-export const getAllTask = async ({ setData }) => {
+export const getAllTask = async ({ setData, catchError, setCatchError }) => {
     try {
         const response = await axios.get("http://localhost:4000/api/tasks");
         setData(response.data.tasks);
     } catch (error) {
-        console.log(error);
+        setCatchError(error.response.data.message);
     }
 };
 
 // updateTask -------------
-export const updateTask = async ({ selectedRowId, title, description, priority, status, setData }) => {
+export const updateTask = async ({ selectedRowId, title, description, priority, status, setData, catchError, setCatchError }) => {
     try {
         const response = await axios.patch(`http://localhost:4000/api/tasks/${selectedRowId}`, {
             title,
@@ -28,12 +28,12 @@ export const updateTask = async ({ selectedRowId, title, description, priority, 
             });
         });
     } catch (error) {
-        console.log(error);
+        setCatchError(error.response.data.message);
     }
 };
 
 // createNewtask -------------
-export const createNewtask = async ({ title, description, priority, status, setData }) => {
+export const createNewtask = async ({ title, description, priority, status, setData, catchError, setCatchError }) => {
     try {
         const response = await axios.post("http://localhost:4000/api/tasks", {
             title,
@@ -43,12 +43,12 @@ export const createNewtask = async ({ title, description, priority, status, setD
         });
         setData((prev) => [...prev, response.data.task]);
     } catch (error) {
-        console.log(error);
+        setCatchError(error.response.data.message);
     }
 };
 
 // deleteTask -------------
-export const deleteTask = async ({ setData, rowData }) => {
+export const deleteTask = async ({ rowData, setData, catchError, setCatchError }) => {
     try {
         const response = await axios.delete(
             `http://localhost:4000/api/tasks/${rowData._id}`
@@ -56,7 +56,7 @@ export const deleteTask = async ({ setData, rowData }) => {
         setData((prev) => prev.filter((item) => item._id !== response.data.id));
         console.log(response);
     } catch (error) {
-        console.log(error);
+        setCatchError(error.response.data.message);
     }
 };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../../components/ui/button";
 import {
   Dialog,
@@ -20,8 +20,10 @@ import {
 } from "../../components/ui/select";
 import { Textarea } from "../../components/ui/textarea";
 import { createNewtask } from "../../services/task";
+import { useToast } from "../../components/ui/use-toast";
 
-const AddTask = ({ setData }) => {
+
+const AddTask = ({ setData, catchError, setCatchError }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
@@ -29,12 +31,26 @@ const AddTask = ({ setData }) => {
 
   const addTaskSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createNewtask({ title, description, priority, status, setData });
+    createNewtask({ title, description, priority, status, setData, setCatchError });
     setTitle("");
     setDescription("");
     setPriority("");
     setStatus("");
   };
+
+
+  const catchErrorFunc = () => {
+    if (catchError) {
+      setTimeout(() => {
+        setCatchError(null);
+      }, 2000);
+      return (
+        <div>
+          <p className="text-red-600">{catchError}</p>
+        </div>
+      );
+    }
+  }
 
   return (
     <Dialog>
@@ -42,6 +58,7 @@ const AddTask = ({ setData }) => {
         <Button variant="outline">Add task</Button>
       </DialogTrigger>
 
+      {catchError ? catchErrorFunc() : null}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
@@ -61,7 +78,7 @@ const AddTask = ({ setData }) => {
               className="col-span-3"
               placeholder="Title"
               onChange={(e: any) => {
-                setTitle(e.target.value);
+                setTitle(e.target.value.trim());
               }}
             />
           </div>
@@ -76,7 +93,7 @@ const AddTask = ({ setData }) => {
               placeholder="Description"
               value={description}
               onChange={(e: any) => {
-                setDescription(e.target.value);
+                setDescription(e.target.value.trim());
               }}
             />
           </div>
