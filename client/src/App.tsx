@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div className="container mx-auto mt-2">
       <Layout />
-      <AddTask setData={setData} catchError={catchError} setCatchError={setCatchError}/>
+      <AddTask setData={setData} catchError={catchError} setCatchError={setCatchError} />
       <Tasks data={data} setData={setData} catchError={catchError} setCatchError={setCatchError} />
     </div>
   );
