@@ -1,5 +1,6 @@
 const express = require("express");
 const taskRoutes = require("./routers/tasks");
+const userRoutes = require("./routers/users");
 const connectDb = require("./db/connect");
 const errorHandler = require("./middlewares/errorHandler");
 
@@ -16,6 +17,7 @@ app.use(cors());
 
 // route middlewares
 app.use("/api/tasks", taskRoutes);
+app.use("/api/auth", userRoutes);
 
 // error middleware
 app.use(errorHandler);

@@ -44,12 +44,3 @@ module.exports = {
   updateTask,
   deleteTask,
 };
-
-// function
-// variable
-// state, reducer, ref
-// comonent props
-// types
-
-// autocomplete
-// bug
