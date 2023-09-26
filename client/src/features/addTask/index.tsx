@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../../components/ui/button";
 import {
   Dialog,
@@ -28,8 +28,14 @@ const AddTask = ({ setData }) => {
   const [status, setStatus] = useState("");
 
   const addTaskSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    createNewtask({ title, description, priority, status, setData });
+    createNewtask({
+      description,
+      priority,
+      status,
+      title,
+      createdAt,
+      updatedAt,
+    });
     setTitle("");
     setDescription("");
     setPriority("");

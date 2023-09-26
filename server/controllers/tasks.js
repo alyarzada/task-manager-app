@@ -32,9 +32,9 @@ const deleteTask = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   const task = await Task.findOneAndDelete({ _id: id });
-  if (task) {
-    return next(createCustomError(`No task with id: ${id}`, 404));
-  }
+  // if (task) {
+  //   return next(createCustomError(`No task with id: ${id}`, 404));
+  // }
   return res.status(200).send({ id: task._id });
 });
 
@@ -44,3 +44,12 @@ module.exports = {
   updateTask,
   deleteTask,
 };
+
+// function
+// variable
+// state, reducer, ref
+// comonent props
+// types
+
+// autocomplete
+// bug
