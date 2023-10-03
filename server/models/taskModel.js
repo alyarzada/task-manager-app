@@ -2,15 +2,6 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-// interface ITask {
-//   title: string;
-//   description: string;
-//   priority: "low" | "medium" | "medium";
-//   status: "todo" | "progress" | "completed";
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
 const taskSchema = new Schema({
   title: {
     type: String,
@@ -39,6 +30,10 @@ const taskSchema = new Schema({
   updatedAt: {
     type: Date,
     default: Date.now,
+  },
+  user_id: {
+    required: true,
+    type: String,
   },
 });
 

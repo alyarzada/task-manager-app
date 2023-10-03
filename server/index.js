@@ -7,6 +7,7 @@ const errorHandler = require("./middlewares/errorHandler");
 // env
 require("dotenv").config();
 const cors = require("cors");
+const { requireAuth } = require("./middlewares/requireAuth");
 
 // init express
 const app = express();
@@ -16,8 +17,8 @@ app.use(express.json());
 app.use(cors());
 
 // route middlewares
-app.use("/api/tasks", taskRoutes);
 app.use("/api/auth", userRoutes);
+app.use("/api/tasks", taskRoutes);
 
 // error middleware
 app.use(errorHandler);

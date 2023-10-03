@@ -8,11 +8,20 @@ const getAllTasks = asyncHandler(async (req, res) => {
   res.status(200).send({ message: "Tasks sent successfully", tasks });
 });
 
+// getUserTasks
+const getUserTasks = asyncHandler(async (req, res) => {
+  const user_id = req.user._id;
+
+  const tasks = await Task.find({ user_id });
+  res.status(200).send({ message: "Tasks sent successfully", tasks });
+});
+
 // createNewTask
 const createNewTask = asyncHandler(async (req, res) => {
   const data = req.body;
+  const user_id = req.user._id;
 
-  const task = await Task.create(data);
+  const task = await Task.create({ ...data, user_id });
   return res.status(200).send({ task });
 });
 
@@ -43,4 +52,5 @@ module.exports = {
   createNewTask,
   updateTask,
   deleteTask,
+  getUserTasks,
 };
