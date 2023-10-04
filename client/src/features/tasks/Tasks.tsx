@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { DataTable } from "../../components/paymet/data-table";
 import { getAllTask } from "../../services/task";
 
-const Tasks = ({ data, setData }) => {
+const Tasks = ({ data, setData, catchError, setCatchError }) => {
   useEffect(() => {
-    getAllTask({ setData });
+    getAllTask({ setData, catchError, setCatchError });
   }, []);
 
   const columns = [
