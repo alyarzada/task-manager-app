@@ -1,6 +1,7 @@
 import React, { ChangeEvent, ChangeEventHandler, FormEvent, useState } from 'react';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
+import axios from 'axios';
 
 interface IFormData {
     email: string,
@@ -13,7 +14,7 @@ interface IUsersError {
 const Login = () => {
     const [formData, setFormData] = useState<IFormData>({
         email: "",
-        password: ""
+        password: "",
     });
     const [userErrors, setUserErrors] = useState<IUsersError>({});
 
@@ -29,7 +30,7 @@ const Login = () => {
 
         if (!formData.password.trim()) {
             errors.password = "Password yoxdur"
-        } else {}
+        } else { }
 
         if (!formData.email.trim()) {
             errors.email = "Email yoxdur"
@@ -39,20 +40,41 @@ const Login = () => {
         return Object.keys(errors).length === 0;
     }
 
+    const login = async () => {
+        const { email, password } = formData;
+        try {
+            const response = await axios.post(
+                `http://localhost:4000/api/auth/login`,
+                {
+                    email,
+                    password,
+                },
+            );
+            localStorage.setItem('token', response.data);
+            console.log(response, "token")
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
     const FormSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validate()) {
+            login()
             console.log(formData, "A")
         }
     }
+
     return (
         <div className='flex justify-center mt-5'>
             <form className='w-96' onSubmit={FormSubmit}>
                 <Input
                     value={formData.email}
                     name='email'
+                    type="email"
                     onChange={handlerChange}
-                    className="my-3" type="email" placeholder="Email" showInput={true} />
+                    className="my-3" placeholder="Email" showInput={true} />
                 <p>{userErrors.email}</p>
                 <Input
                     value={formData.password}

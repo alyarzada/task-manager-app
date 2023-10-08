@@ -1,6 +1,9 @@
 import React, { ChangeEvent, ChangeEventHandler, FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
+import { useToast } from "@/components/ui/use-toast";
+import axios from 'axios';
 
 interface IFormData {
     username: string,
@@ -13,6 +16,9 @@ interface IUsersError {
     password: string
 }
 const Register = () => {
+    const { toast } = useToast()
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState<IFormData>({
         username: "",
         email: "",
@@ -46,9 +52,26 @@ const Register = () => {
         return Object.keys(errors).length === 0;
     }
 
+    const register = async () => {
+        const { username, email, password } = formData;
+        try {
+            const response = await axios.post(`http://localhost:4000/api/auth/register`, {
+                username, email, password
+            });
+            toast({
+                description: response
+            })
+            navigate('/login');
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     const FormSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validate()) {
+            register()
             console.log(formData, "A")
         }
     }

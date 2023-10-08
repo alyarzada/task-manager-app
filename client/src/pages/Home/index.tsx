@@ -2,7 +2,6 @@ import { useState } from "react";
 import AddTask from "../../features/addTask/index";
 import Tasks from "../../features/tasks/Tasks";
 import Layout from "../../layout/index";
-
 const Home = () => {
     const [data, setData] = useState([]);
     const [catchError, setCatchError] = useState(null)

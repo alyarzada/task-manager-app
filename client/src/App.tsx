@@ -2,6 +2,7 @@ import { useState } from "react";
 import AddTask from "./features/addTask";
 import Tasks from "./features/tasks/Tasks";
 import Layout from "./layout";
+import { Toaster } from "./components/ui/toaster";
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -9,6 +10,7 @@ const App = () => {
 
   return (
     <div className="container mx-auto mt-2">
+      <Toaster />
       <Layout />
       <AddTask
         setData={setData}
