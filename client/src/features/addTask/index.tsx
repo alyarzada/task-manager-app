@@ -20,7 +20,6 @@ import {
 } from "../../components/ui/select";
 import { Textarea } from "../../components/ui/textarea";
 import { createNewtask } from "../../services/task";
-import { useToast } from "../../components/ui/use-toast";
 
 const AddTask = ({ setData, catchError, setCatchError }) => {
   const [title, setTitle] = useState("");
@@ -83,9 +82,8 @@ const AddTask = ({ setData, catchError, setCatchError }) => {
               className="col-span-3"
               placeholder="Title"
               onChange={(e: any) => {
-                setTitle(e.target.value.trim());
-              }}
-            />
+                setTitle(e.target.value);
+              } } showInput={true} />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
@@ -98,7 +96,7 @@ const AddTask = ({ setData, catchError, setCatchError }) => {
               placeholder="Description"
               value={description}
               onChange={(e: any) => {
-                setDescription(e.target.value.trim());
+                setDescription(e.target.value);
               }}
             />
           </div>

@@ -1,17 +1,14 @@
 import { useEffect } from "react";
 import { DataTable } from "../../components/paymet/data-table";
-import { getAllTask } from "../../services/task";
+import { getAllTask, getMyTask } from "../../services/task";
 
 const Tasks = ({ data, setData, catchError, setCatchError }) => {
+  
   useEffect(() => {
-    getAllTask({ setData, catchError, setCatchError });
+    getMyTask({ setData, catchError, setCatchError });
   }, []);
 
   const columns = [
-    {
-      accessorKey: "_id",
-      header: "ID",
-    },
     {
       accessorKey: "title",
       header: "Title",

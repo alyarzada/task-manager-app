@@ -1,7 +1,8 @@
 import React, { ChangeEvent, ChangeEventHandler, FormEvent, useState } from 'react';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { Api } from '../../api/Api';
 
 interface IFormData {
     email: string,
@@ -12,6 +13,7 @@ interface IUsersError {
     password: string
 }
 const Login = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<IFormData>({
         email: "",
         password: "",
@@ -43,26 +45,23 @@ const Login = () => {
     const login = async () => {
         const { email, password } = formData;
         try {
-            const response = await axios.post(
-                `http://localhost:4000/api/auth/login`,
+            const response = await Api().post(`/api/auth/login`,
                 {
                     email,
                     password,
                 },
             );
-            localStorage.setItem('token', response.data);
-            console.log(response, "token")
+            localStorage.setItem('token', JSON.stringify(response.data.token));
+            navigate('/');
         } catch (error) {
             console.log(error);
         }
     };
 
-
     const FormSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validate()) {
             login()
-            console.log(formData, "A")
         }
     }
 
@@ -81,6 +80,7 @@ const Login = () => {
                     name='password'
                     onChange={handlerChange}
                     className="my-3" type="password" placeholder="Password" showInput={true} />
+
                 <p>{userErrors.password}</p>
 
                 <Button type='submit'>Login</Button>

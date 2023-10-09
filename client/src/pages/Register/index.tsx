@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import { useToast } from "@/components/ui/use-toast";
-import axios from 'axios';
+import { Api } from '../../api/Api';
 
 interface IFormData {
     username: string,
@@ -55,7 +55,7 @@ const Register = () => {
     const register = async () => {
         const { username, email, password } = formData;
         try {
-            const response = await axios.post(`http://localhost:4000/api/auth/register`, {
+            const response = await Api().post(`/api/auth/register`, {
                 username, email, password
             });
             toast({
@@ -67,14 +67,13 @@ const Register = () => {
         }
     }
 
-
     const FormSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validate()) {
             register()
-            console.log(formData, "A")
         }
     }
+
     return (
         <div className='flex justify-center mt-5'>
             <form className='w-96' onSubmit={FormSubmit}>
@@ -96,7 +95,6 @@ const Register = () => {
                     onChange={handlerChange}
                     className="my-3" type="password" placeholder="Password" showInput={true} />
                 <p>{userErrors.password}</p>
-
                 <Button type='submit'>Register</Button>
             </form>
         </div>
