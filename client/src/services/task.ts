@@ -1,17 +1,27 @@
+import { Api } from "../api/Api";
 import { IAddTaskInput } from "@/types/task/input";
 import { IGetAllTasksOutput } from "@/types/task/output";
-import axios from "axios";
 
 // getAllTask -------------
-export const getAllTask = async ({
+export const getAllTask = async ({setData}: {
+  setData: React.Dispatch<React.SetStateAction<never[]>>;
+}): void => {
+  try {
+    const response: Promise<IGetAllTasksOutput> = await Api().get("/api/tasks/all");
+    setData(response.data.tasks);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// getMyTask -------------
+export const getMyTask = async ({
   setData,
 }: {
   setData: React.Dispatch<React.SetStateAction<never[]>>;
 }): void => {
   try {
-    const response: Promise<IGetAllTasksOutput> = await axios.get(
-      "http://localhost:4000/api/tasks"
-    );
+    const response: Promise<IGetAllTasksOutput> = await Api().get("/api/tasks");
     setData(response.data.tasks);
   } catch (error) {
     console.log(error);
@@ -28,8 +38,8 @@ export const updateTask = async ({
   setData,
 }) => {
   try {
-    const response = await axios.patch(
-      `http://localhost:4000/api/tasks/${selectedRowId}`,
+    const response = await Api().patch(
+      `/api/tasks/${selectedRowId}`,
       {
         title,
         description,
@@ -53,7 +63,7 @@ export const updateTask = async ({
 // createNewtask -------------
 export const createNewtask = async (body: IAddTaskInput) => {
   try {
-    const response = await axios.post("http://localhost:4000/api/tasks", {
+    const response = await Api().post("/api/tasks", {
       ...body,
     });
     setData((prev) => [...prev, response.data.task]);
@@ -65,11 +75,10 @@ export const createNewtask = async (body: IAddTaskInput) => {
 // deleteTask -------------
 export const deleteTask = async ({ setData, rowData }) => {
   try {
-    const response = await axios.delete(
+    const response = await Api().delete(
       `http://localhost:4000/api/tasks/${rowData._id}`
     );
     setData((prev) => prev.filter((item) => item._id !== response.data.id));
-    console.log(response);
   } catch (error) {
     console.log(error);
   }
@@ -107,3 +116,7 @@ export const handleEditButtonClick = (
   setStatus(rowData.status);
   setSelectedRowId(rowData._id);
 };
+function setData(arg0: (prev: any) => any[]) {
+  throw new Error("Function not implemented.");
+}
+

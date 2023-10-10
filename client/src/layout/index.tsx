@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Header from './header/Header'
 
-const Layout = () => {
+const Layout = ({setData}) => {
     return (
         <div >
-            <Header />
+            <Header setData={setData}/>
             <Outlet />
         </div>
     )

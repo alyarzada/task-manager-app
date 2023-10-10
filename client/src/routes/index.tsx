@@ -4,11 +4,12 @@ import {
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import { PrivateRoute } from "./PrivateRouter";
 
 export const routers = createBrowserRouter([
     {
         path: "/",
-        element: <Home />,
+        element: <PrivateRoute element={<Home/>} />,
     },
     {
         path: "/login",

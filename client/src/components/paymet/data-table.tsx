@@ -149,6 +149,7 @@ export function DataTable<TData, TValue>({
                             onChange={(e: any) => {
                               setTitle(e.target.value);
                             }}
+                            showInput={true}
                           />
                         </div>
 
