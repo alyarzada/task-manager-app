@@ -48,7 +48,13 @@ import { Button } from "../ui/button";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { deleteTask, handleDeleteButtonClick, handleEditButtonClick, handleUpdateButtonClick, updateTask } from "../../services/task";
+import {
+  deleteTask,
+  handleDeleteButtonClick,
+  handleEditButtonClick,
+  handleUpdateButtonClick,
+  updateTask,
+} from "../../services/task";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -74,7 +80,14 @@ export function DataTable<TData, TValue>({
 
   const formSubmit = (e: any) => {
     e.preventDefault();
-    handleUpdateButtonClick({ selectedRowId, title, description, priority, status, setData })
+    handleUpdateButtonClick({
+      selectedRowId,
+      title,
+      description,
+      priority,
+      status,
+      setData,
+    });
   };
 
   return (
@@ -89,9 +102,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 );
               })}
@@ -119,7 +132,16 @@ export function DataTable<TData, TValue>({
                     <DialogTrigger asChild>
                       <Button
                         variant="ghost"
-                        onClick={() => handleEditButtonClick(row.original, setTitle, setDescription, setPriority, setStatus, setSelectedRowId)}
+                        onClick={() =>
+                          handleEditButtonClick(
+                            row.original,
+                            setTitle,
+                            setDescription,
+                            setPriority,
+                            setStatus,
+                            setSelectedRowId
+                          )
+                        }
                         className="mr-2"
                       >
                         <Pencil className="h-4 w-4" />
@@ -136,7 +158,6 @@ export function DataTable<TData, TValue>({
                       </DialogHeader>
 
                       <form className="grid gap-4 py-4" onSubmit={formSubmit}>
-
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="title" className="text-right">
                             Title
@@ -149,7 +170,6 @@ export function DataTable<TData, TValue>({
                             onChange={(e: any) => {
                               setTitle(e.target.value);
                             }}
-                            showInput={true}
                           />
                         </div>
 
@@ -212,13 +232,12 @@ export function DataTable<TData, TValue>({
 
                         <DialogFooter>
                           <DialogTrigger>
-                            <Button type="submit" >Save changes</Button>
+                            <Button type="submit">Save changes</Button>
                           </DialogTrigger>
                         </DialogFooter>
                       </form>
                     </DialogContent>
                   </Dialog>
-
 
                   {/* Delete Button */}
                   <AlertDialog>
@@ -241,7 +260,9 @@ export function DataTable<TData, TValue>({
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => handleDeleteButtonClick(row.original, setData)}
+                          onClick={() =>
+                            handleDeleteButtonClick(row.original, setData)
+                          }
                         >
                           Continue
                         </AlertDialogAction>
@@ -249,7 +270,6 @@ export function DataTable<TData, TValue>({
                     </AlertDialogContent>
                   </AlertDialog>
                 </TableCell>
-
               </TableRow>
             ))
           ) : (

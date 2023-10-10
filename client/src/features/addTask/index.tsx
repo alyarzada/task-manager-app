@@ -83,7 +83,8 @@ const AddTask = ({ setData, catchError, setCatchError }) => {
               placeholder="Title"
               onChange={(e: any) => {
                 setTitle(e.target.value);
-              } } showInput={true} />
+              }}
+            />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">

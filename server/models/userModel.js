@@ -20,6 +20,10 @@ const userSchema = new Schema({
     required: true,
     trim: true,
   },
+  avatar: {
+    type: String,
+    default: "image.jpg",
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
