@@ -1,6 +1,8 @@
 const express = require("express");
 const taskRoutes = require("./routers/tasks");
 const userRoutes = require("./routers/users");
+const userDetailsRoutes = require("./routers/userDetails");
+
 const connectDb = require("./db/connect");
 const errorHandler = require("./middlewares/errorHandler");
 
@@ -20,6 +22,7 @@ app.use(cors());
 // route middlewares
 app.use("/api/auth", upload.single("avatar"), userRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/userDetails", userDetailsRoutes);
 
 // error middleware
 app.use(errorHandler);

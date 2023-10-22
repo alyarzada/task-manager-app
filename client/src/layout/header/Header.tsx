@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import {
   Avatar,
@@ -21,6 +21,12 @@ const Header = ({ setData }) => {
   const [showAllTasks, setShowAllTasks] = useState(false);
   const [avatar, setAvatar] = useState("");
 
+  const [userDetails, setUserDetails] = useState(null);
+
+  useEffect(() => {
+    getUserDetailsHandler();
+  }, []);
+
   const AllTasks = async () => {
     try {
       const response = await Api().get("/api/tasks/all");
@@ -38,6 +44,15 @@ const Header = ({ setData }) => {
       setData(response.data.tasks);
       setShowMyTasks(true);
       setShowAllTasks(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserDetailsHandler = async () => {
+    try {
+      const response = await Api().get("/api/userDetails");
+      setUserDetails(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -74,10 +89,17 @@ const Header = ({ setData }) => {
       <Dialog>
         <DialogTrigger>
           <div className="flex justify-between items-center cursor-pointer">
-            <p className="font-medium mr-3">Filankes Filankesov</p>
+            <p className="font-medium mr-3">{userDetails?.username}</p>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              {userDetails?.avatar !== "image.jpg" ? (
+                <AvatarImage
+                  src={"data:image/jpeg;base64," + userDetails?.avatar}
+                />
+              ) : (
+                <AvatarFallback>
+                  {userDetails?.username.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              )}
             </Avatar>
           </div>
         </DialogTrigger>

@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 export const PrivateRoute = ({ element }: { element: React.ReactNode }) => {
   const isAuthenticated = JSON.parse(
     `${localStorage.getItem("userData")}`
-  ).token;
+  )?.token;
   const navigate = useNavigate();
 
   useEffect(() => {
